@@ -1,10 +1,5 @@
-import {
-  IsDate,
-  IsOptional,
-  IsString,
-  IsUrl,
-  ValidateNested,
-} from 'class-validator';
+import { IsOptional, IsString, IsUrl, Validate } from 'class-validator';
+import { IsArrayOrString, IsArrayOrStringOfUrls } from '../validator';
 
 export class UpdateProfileDto {
   @IsString()
@@ -28,31 +23,42 @@ export class UpdateProfileDto {
   professionalSummary?: string;
 
   @IsString()
+  @IsOptional()
   title?: string;
+
   @IsString()
   @IsOptional()
   location?: string;
 
-  @IsDate()
+  @IsString()
+  @IsOptional()
   careerStarDate?: string;
+
   @IsString()
   @IsOptional()
   isOpenToWork?: boolean;
+
   @IsString()
   @IsOptional()
   isOpenToRelocation?: boolean;
+
   @IsString()
   @IsOptional()
   preferredLocation?: string;
-  @IsString()
+
+  @Validate(IsArrayOrString, {
+    message: 'techStack should be either string or array of strings',
+  })
   @IsOptional()
-  @ValidateNested()
   techStack?: string | string[];
+
   @IsUrl()
   @IsOptional()
   cvLink?: string;
-  @IsUrl()
+
   @IsOptional()
-  @ValidateNested()
+  @Validate(IsArrayOrStringOfUrls, {
+    message: 'socialMediaLink should be either url or array of urls',
+  })
   socialMediaLink?: string | string[];
 }
